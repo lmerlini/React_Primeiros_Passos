@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Produto from './Produto';
+const App = () => {
+  const [produto, setProduto] = React.useState(null);
 
-function App() {
+  async function handleClick(e) {
+    const value = e.target.innerText;
+    const result = await fetch(
+      'https://ranekapi.origamid.dev/json/api/produto/' + value,
+    ).then((response) => response.json());
+    if (!window.localStorage.getItem(result.id)) {
+      window.localStorage.setItem(result.id, result.nome);
+    }
+    setProduto(result);
+  }
+
+  function handleStorage() {
+    window.localStorage.clear();
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button style={{ margin: '1rem' }} onClick={handleClick}>
+        notebook
+      </button>
+      <button onClick={handleClick}>smartphone</button>
+      {produto && <Produto produto={produto} />}
+      <button
+        onClick={handleStorage}
+        style={{
+          backgroundColor: 'red',
+          marginRight: -10,
+          float: 'right',
+        }}
+      >
+        Limpar Storage
+      </button>
+    </>
   );
-}
+};
 
 export default App;
