@@ -2,21 +2,26 @@ import React from 'react';
 import Produto from './Produto';
 const App = () => {
   const [produto, setProduto] = React.useState(null);
-
-  async function handleClick(e) {
-    const value = e.target.innerText;
+  async function requestAPI(produto) {
     const result = await fetch(
-      'https://ranekapi.origamid.dev/json/api/produto/' + value,
+      'https://ranekapi.origamid.dev/json/api/produto/' + produto,
     ).then((response) => response.json());
-    if (!window.localStorage.getItem(result.id)) {
-      window.localStorage.setItem(result.id, result.nome);
-    }
+    return result;
+  }
+  async function handleClick(e) {
+    const result = await requestAPI(e.target.innerText);
+    window.localStorage.clear();
+    window.localStorage.setItem(result.id, result.nome);
+
     setProduto(result);
   }
 
-  function handleStorage() {
-    window.localStorage.clear();
-  }
+  React.useEffect(() => {
+    async function callEffect() {
+      setProduto(await requestAPI(window.localStorage.key(0)));
+    }
+    callEffect();
+  }, [produto]);
   return (
     <>
       <button style={{ margin: '1rem' }} onClick={handleClick}>
@@ -24,16 +29,6 @@ const App = () => {
       </button>
       <button onClick={handleClick}>smartphone</button>
       {produto && <Produto produto={produto} />}
-      <button
-        onClick={handleStorage}
-        style={{
-          backgroundColor: 'red',
-          marginRight: -10,
-          float: 'right',
-        }}
-      >
-        Limpar Storage
-      </button>
     </>
   );
 };
