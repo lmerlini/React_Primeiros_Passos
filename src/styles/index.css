@@ -1,0 +1,39 @@
+body{
+    background-color: rgb(180, 90, 50);
+}
+*{
+    margin: 0 2px 0 1px  !important;
+    padding: 0;
+}
+header {
+    width: 100%;
+    height: 50px;
+    background: #363640;
+}
+header > ul {
+    display: flex;
+    float: right;
+}
+ul,li{
+    list-style: none;
+}
+li {
+    margin: .7rem  !important;
+}
+li:last-of-type{
+    margin-right: 50px !important;
+}
+li>a{
+    text-decoration: none;
+    color:#fff;
+}
+li>a:hover{
+    text-decoration: underline 5px #90D3FF ;
+    letter-spacing: 2px;
+}
+.content {
+    width: 100%;
+    height: calc(100vh - 50px);
+    background: #CFCFCF;
+}
+
